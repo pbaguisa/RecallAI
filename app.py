@@ -295,169 +295,266 @@ HTML_TEMPLATE = """
 <head>
     <title>RecallAI - Study Smarter</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500&display=swap');
+        :root {
+            --bg: #0a0a0a;
+            --bg-alt: #121212;
+            --card: #1a1a1a;
+            --card-alt: #222222;
+            --accent: #b8bcc8;
+            --accent-strong: #d4d8e4;
+            --accent-soft: rgba(184, 188, 200, 0.1);
+            --text: #f2f4ff;
+            --muted: #a0a0a0;
+            --border: rgba(255, 255, 255, 0.08);
+            --warning: #f4c27f;
+            --error-bg: rgba(255, 99, 132, 0.12);
+            --error-text: #ff708d;
+            --success-bg: rgba(104, 211, 145, 0.12);
+            --success-text: #7fd8a6;
+        }
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at top, #1a1a1a 0%, #0f0f0f 45%, #0a0a0a 100%);
+            color: var(--text);
             min-height: 100vh;
-            padding: 20px;
+            padding: 32px 20px 60px;
         }
         .container {
-            max-width: 900px;
+            max-width: 920px;
             margin: 0 auto;
         }
         .header {
-            background: white;
-            border-radius: 12px;
-            padding: 30px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(145deg, #1a1a1a, #222222);
+            border-radius: 20px;
+            padding: 36px;
+            margin-bottom: 24px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
         }
         .header h1 {
-            color: #667eea;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            color: var(--text);
+            font-size: 2.4em;
+            margin-bottom: 12px;
+            letter-spacing: 0.02em;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .logo {
+            width: 1.2em;
+            height: 1.2em;
+            display: inline-block;
+        }
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
         .header p {
-            color: #666;
-            font-size: 1.1em;
+            color: var(--muted);
+            font-size: 1.05em;
+            line-height: 1.5;
         }
         .card {
-            background: white;
-            border-radius: 12px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            background: linear-gradient(160deg, rgba(20, 20, 20, 0.85), rgba(26, 26, 26, 0.95));
+            border-radius: 18px;
+            padding: 28px;
+            margin-bottom: 22px;
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.55);
+        }
+        .card h2 {
+            font-family: 'Space Grotesk', 'Inter', sans-serif;
+            color: var(--text);
+            font-size: 1.35em;
+            margin-bottom: 18px;
         }
         .upload-zone {
-            border: 3px dashed #667eea;
-            border-radius: 8px;
-            padding: 40px;
+            border: 2px dashed rgba(184, 188, 200, 0.5);
+            border-radius: 14px;
+            padding: 42px;
             text-align: center;
             cursor: pointer;
-            transition: all 0.3s;
+            transition: all 0.3s ease;
+            background: rgba(15, 15, 15, 0.6);
+            color: var(--muted);
         }
         .upload-zone:hover {
-            background: #f7f9ff;
-            border-color: #764ba2;
+            background: rgba(184, 188, 200, 0.08);
+            border-color: var(--accent);
+            transform: translateY(-2px);
         }
         .upload-zone input {
             display: none;
         }
         .btn {
-            background: #667eea;
-            color: white;
+            background: linear-gradient(120deg, #c8ccd8, #b0b4c0);
+            color: #0a0a0a;
             border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
+            padding: 14px 26px;
+            border-radius: 12px;
             cursor: pointer;
             font-size: 1em;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 12px 25px rgba(180, 184, 196, 0.25);
         }
         .btn:hover {
-            background: #764ba2;
-            transform: translateY(-2px);
+            background: linear-gradient(120deg, #d4d8e4, #c0c4d0);
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 15px 35px rgba(180, 184, 196, 0.35);
         }
         .btn:disabled {
-            background: #ccc;
+            background: rgba(184, 188, 200, 0.25);
+            color: rgba(255, 255, 255, 0.4);
             cursor: not-allowed;
+            box-shadow: none;
             transform: none;
         }
         .mode-toggle {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
+            gap: 12px;
+            margin-bottom: 24px;
         }
         .mode-btn {
             flex: 1;
-            padding: 12px;
-            border: 2px solid #667eea;
-            background: white;
-            color: #667eea;
-            border-radius: 8px;
+            padding: 14px;
+            border: 1px solid var(--border);
+            background: rgba(18, 18, 18, 0.8);
+            color: var(--muted);
+            border-radius: 14px;
             cursor: pointer;
             font-size: 1em;
-            transition: all 0.3s;
+            font-weight: 600;
+            transition: all 0.3s ease;
         }
         .mode-btn.active {
-            background: #667eea;
-            color: white;
+            background: var(--accent-soft);
+            border-color: rgba(184, 188, 200, 0.6);
+            color: var(--text);
+            box-shadow: inset 0 0 35px rgba(180, 184, 196, 0.15);
         }
         .query-input {
             width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            padding: 18px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
             font-size: 1em;
-            margin-bottom: 15px;
+            margin-bottom: 18px;
+            background: rgba(15, 15, 15, 0.6);
+            color: var(--text);
+            transition: border 0.2s ease, box-shadow 0.2s ease;
+        }
+        .query-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
         }
         .query-input:focus {
             outline: none;
-            border-color: #667eea;
+            border-color: rgba(184, 188, 200, 0.7);
+            box-shadow: 0 0 0 3px rgba(180, 184, 196, 0.15);
         }
         .response-box {
-            background: #f7f9ff;
-            border-radius: 8px;
-            padding: 20px;
-            margin-top: 20px;
-            min-height: 100px;
+            background: rgba(12, 12, 12, 0.85);
+            border-radius: 18px;
+            padding: 24px;
+            margin-top: 24px;
+            min-height: 110px;
+            border: 1px solid var(--border);
+            line-height: 1.6;
         }
         .response-box.quiz {
-            background: #fff4e6;
+            background: rgba(43, 27, 7, 0.6);
+            border-color: rgba(244, 194, 127, 0.4);
         }
         .forfeit-btn {
-            background: #ff6b6b;
+            background: linear-gradient(120deg, #ff7c96, #ff5175);
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+            padding: 11px 22px;
+            border-radius: 12px;
             cursor: pointer;
-            margin-top: 15px;
+            margin-top: 18px;
+            font-weight: 600;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
         .forfeit-btn:hover {
-            background: #ee5a52;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(255, 112, 141, 0.3);
         }
         .loading {
             text-align: center;
-            color: #667eea;
-            font-size: 1.1em;
+            color: var(--accent);
+            font-size: 1.05em;
             padding: 20px;
         }
         .error {
-            background: #fee;
-            color: #c00;
+            background: var(--error-bg);
+            color: var(--error-text);
             padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+            border-radius: 12px;
+            margin-top: 18px;
+            border: 1px solid rgba(255, 112, 141, 0.3);
         }
         .success {
-            background: #efe;
-            color: #060;
+            background: var(--success-bg);
+            color: var(--success-text);
             padding: 15px;
-            border-radius: 8px;
-            margin-top: 15px;
+            border-radius: 12px;
+            margin-top: 18px;
+            border: 1px solid rgba(127, 216, 166, 0.3);
         }
         .files-list {
-            margin-top: 15px;
+            margin-top: 18px;
         }
         .file-item {
-            background: #f0f0f0;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 8px;
+            background: rgba(18, 18, 18, 0.8);
+            padding: 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+            color: var(--muted);
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 RecallAI</h1>
+            <h1>
+                <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 80" width="80" height="80">
+                    <defs>
+                        <linearGradient id="silverGradientIconTrimmed" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#B0B0B0" />
+                            <stop offset="100%" stop-color="#FFFFFF" />
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(0, 0)">
+                        <animateTransform attributeName="transform" type="rotate" from="0 40 40" to="360 40 40" dur="8s" repeatCount="indefinite"/>
+                        <path d="M 5,40 A 35,35 0 0,1 60,20" 
+                              fill="none" stroke="url(#silverGradientIconTrimmed)" stroke-width="8" stroke-linecap="round" />
+                        <path d="M 48,10 L 60,20 L 48,30" 
+                              fill="none" stroke="url(#silverGradientIconTrimmed)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                        <path d="M 75,40 A 35,35 0 0,1 20,60" 
+                              fill="none" stroke="url(#silverGradientIconTrimmed)" stroke-width="8" stroke-linecap="round" />
+                        <path d="M 32,50 L 20,60 L 32,70" 
+                              fill="none" stroke="url(#silverGradientIconTrimmed)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    </g>
+                </svg>
+                RecallAI
+            </h1>
             <p>Study smarter with AI-powered summaries and testing</p>
-            <p id="statusText" style="margin-top: 8px; color: #666; font-size: 0.9em;"></p>
+            <p id="statusText" style="margin-top: 8px; color: var(--muted); font-size: 0.9em;"></p>
         </div>
 
         <div class="card">

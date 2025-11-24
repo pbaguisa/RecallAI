@@ -32,3 +32,6 @@
 {"timestamp": "2025-11-24T13:49:27.477018", "mode": "forfeit", "pathway": "RAG", "query": "Test me on anything within the slides", "latency_ms": 1474, "tokens": 419, "cost_usd": 0.0, "metadata": {}}
 {"timestamp": "2025-11-24T13:58:08.249685", "mode": "quiz", "pathway": "RAG", "query": "Quiz me on anythin withinn the slides", "latency_ms": 1791, "tokens": 515, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
 {"timestamp": "2025-11-24T13:58:15.036480", "mode": "forfeit", "pathway": "RAG", "query": "Quiz me on anythin withinn the slides", "latency_ms": 1975, "tokens": 388, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-24T14:35:52.093566", "mode": "summary", "pathway": "RAG", "query": "Explain what an operating system is like im 12 years old", "latency_ms": 4262, "tokens": 661, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-24T14:36:31.079041", "mode": "quiz", "pathway": "RAG", "query": "Test me on anything within the slides", "latency_ms": 2525, "tokens": 514, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-24T14:36:41.288618", "mode": "forfeit", "pathway": "RAG", "query": "Test me on anything within the slides", "latency_ms": 1423, "tokens": 419, "cost_usd": 0.0, "metadata": {}}
