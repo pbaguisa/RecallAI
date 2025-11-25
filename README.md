@@ -357,7 +357,7 @@ MIT License - feel free to use for your coursework!
 
 ## 👤 Author
 
-Your Name - LLM App Assignment
+Patrick Baguisa
 
 ## 🙏 Acknowledgments
 
@@ -367,5 +367,6 @@ Your Name - LLM App Assignment
 - Flask for web framework
 
 ---
+
 
 **Made with 📚 for students who want to study smarter, not harder**
