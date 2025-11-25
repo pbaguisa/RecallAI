@@ -369,7 +369,8 @@ Patrick Baguisa
 ---
 
 
-**RecallAI: Your Lectures, Your Assessments, Your Success**
+**🔃 RecallAI: Your Lectures, Your Assessments, Your Success**
+
 
 
 
