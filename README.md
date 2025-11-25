@@ -1,4 +1,4 @@
-# 📚 RecallAI
+# 🔃 RecallAI
 
 > RAG-powered study assistant for active recall and quiz-based learning
 
@@ -369,5 +369,6 @@ Patrick Baguisa
 ---
 
 
-**Your Lectures, Your Assessments, Your Victories.**
+**RecallAI: Your Lectures, Your Assessments, Your Victories.**
+
 
