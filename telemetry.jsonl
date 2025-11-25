@@ -40,3 +40,27 @@
 {"timestamp": "2025-11-24T15:41:34.360696", "mode": "summary", "pathway": "RAG", "query": "Explain what an operating system is to me like im 13 years old", "latency_ms": 7055, "tokens": 772, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
 {"timestamp": "2025-11-24T15:42:00.910403", "mode": "quiz", "pathway": "RAG", "query": "Generate a quiz question", "latency_ms": 5944, "tokens": 269, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-11-24T16:08:32.164358", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3042, "tokens": 447, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:44:47.185679", "mode": "summary", "pathway": "RAG", "query": "Explain what an operating system is like im 12", "latency_ms": 5949, "tokens": 702, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-24T22:45:09.300632", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3656, "tokens": 468, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:45:35.418894", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3823, "tokens": 484, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:46:40.228107", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3072, "tokens": 408, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:47:11.871057", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2800, "tokens": 354, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:47:44.738680", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2963, "tokens": 382, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:47:59.382614", "mode": "validate_answer", "pathway": "RAG", "query": "Operating Systems perform an _________ role between the user and computer hardware.", "latency_ms": 2973, "tokens": 430, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-24T22:48:08.905306", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2909, "tokens": 362, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T22:48:48.842746", "mode": "validate_answer", "pathway": "RAG", "query": "Most modern operating systems are considered a ________ model.", "latency_ms": 1322, "tokens": 404, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-25T01:14:47.740447", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3241, "tokens": 387, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:15:06.955642", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2814, "tokens": 359, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:15:07.514989", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2045, "tokens": 380, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:15:08.624709", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3057, "tokens": 401, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:15:08.649570", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2512, "tokens": 381, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:15:14.537993", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5343, "tokens": 421, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:29:33.131070", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2307, "tokens": 381, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:29:33.205193", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2472, "tokens": 404, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T01:29:41.272841", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2379, "tokens": 385, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T11:02:06.371952", "mode": "summary", "pathway": "RAG", "query": "When is the HashTable more appropriate to use than the Triangular Matrix?", "latency_ms": 2163, "tokens": 511, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-25T11:02:22.035146", "mode": "summary", "pathway": "RAG", "query": "When is the HashTable more appropriate to use than the Triangular Matrix? Can you explain further?", "latency_ms": 3745, "tokens": 678, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-25T11:02:47.326782", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2456, "tokens": 399, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T11:03:01.251604", "mode": "validate_answer", "pathway": "RAG", "query": "The Na\u00efve approach for finding frequent pairs fails if ____ exceeds main memory.", "latency_ms": 2269, "tokens": 494, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-25T11:06:38.860912", "mode": "summary", "pathway": "RAG", "query": "Whats a HashTable", "latency_ms": 5090, "tokens": 330, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T11:07:13.460955", "mode": "summary", "pathway": "RAG", "query": "Give me a summary of the slide", "latency_ms": 5725, "tokens": 1047, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}

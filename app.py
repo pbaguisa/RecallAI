@@ -735,7 +735,7 @@ HTML_TEMPLATE = """
             <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
                 <input type="file" id="fileInput" accept=".pdf" multiple>
                 <p>📄 Click to upload PDF files</p>
-                <p style="color: #999; font-size: 0.9em;">Maximum 10 PDFs, 50 pages each</p>
+                <p style="color: #999; font-size: 0.9em;">Maximum 10 PDFs, 100 pages each</p>
             </div>
             <div id="uploadStatus"></div>
             <div id="filesList" class="files-list"></div>

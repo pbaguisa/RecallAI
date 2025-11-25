@@ -8,7 +8,7 @@ from typing import Dict
 
 # Configuration
 MAX_QUERY_LENGTH = 500
-MAX_PDF_PAGES = 50
+MAX_PDF_PAGES = 100
 
 # Safety patterns
 INJECTION_PATTERNS = [
