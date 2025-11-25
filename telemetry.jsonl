@@ -64,3 +64,37 @@
 {"timestamp": "2025-11-25T11:03:01.251604", "mode": "validate_answer", "pathway": "RAG", "query": "The Na\u00efve approach for finding frequent pairs fails if ____ exceeds main memory.", "latency_ms": 2269, "tokens": 494, "cost_usd": 0.0, "metadata": {}}
 {"timestamp": "2025-11-25T11:06:38.860912", "mode": "summary", "pathway": "RAG", "query": "Whats a HashTable", "latency_ms": 5090, "tokens": 330, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-11-25T11:07:13.460955", "mode": "summary", "pathway": "RAG", "query": "Give me a summary of the slide", "latency_ms": 5725, "tokens": 1047, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-25T13:31:00.360850", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3440, "tokens": 468, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:42:49.492752", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 6110, "tokens": 487, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:46:04.851436", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 4158, "tokens": 403, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:46:20.418193", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3415, "tokens": 440, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:46:41.764728", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 4668, "tokens": 464, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:46:48.474133", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5114, "tokens": 391, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:47:02.813683", "mode": "validate_answer", "pathway": "RAG", "query": "The CPU is unable to access the program directly from the ______.", "latency_ms": 3215, "tokens": 486, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-25T13:47:24.869299", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2985, "tokens": 385, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:51:38.787173", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5214, "tokens": 423, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:52:00.819700", "mode": "summary", "pathway": "RAG", "query": "What is an operating system?", "latency_ms": 1874, "tokens": 570, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-25T13:52:38.280697", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3578, "tokens": 416, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:58:49.600138", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3924, "tokens": 387, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:59:01.238352", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3427, "tokens": 455, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:59:04.140633", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5476, "tokens": 465, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:59:15.644991", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2965, "tokens": 447, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:59:27.454561", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3347, "tokens": 425, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:59:36.669213", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 6856, "tokens": 425, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T13:59:43.426633", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3350, "tokens": 364, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:01:42.458636", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 7613, "tokens": 484, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:02:03.064922", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3664, "tokens": 415, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:02:17.288811", "mode": "validate_answer", "pathway": "RAG", "query": "A return value of ____ indicates end of file when using a read() function in UNIX and Linux.", "latency_ms": 1835, "tokens": 505, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-25T14:04:17.985864", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 6312, "tokens": 428, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:04:25.452634", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3649, "tokens": 482, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:04:30.929724", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 4121, "tokens": 472, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:04:35.407932", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2753, "tokens": 388, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:04:40.052356", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3302, "tokens": 392, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:05:48.534628", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 6441, "tokens": 421, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:07:09.381800", "mode": "summary", "pathway": "RAG", "query": "Ask me anything within the slides", "latency_ms": 2956, "tokens": 518, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-25T14:07:40.645226", "mode": "summary", "pathway": "RAG", "query": "Give me a summary on anything", "latency_ms": 3885, "tokens": 353, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:07:50.444555", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2951, "tokens": 416, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:07:57.878809", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3967, "tokens": 389, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:07:59.549461", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 7467, "tokens": 478, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:08:01.551974", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2186, "tokens": 384, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:08:04.779731", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3241, "tokens": 455, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}

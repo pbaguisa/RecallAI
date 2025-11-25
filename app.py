@@ -940,12 +940,23 @@ HTML_TEMPLATE = """
                 return;
             }
 
+            // Normalize options to remove any existing A/B/C/D prefixes
+            const normalizedOptions = quizData.options.map((option, index) => {
+                if (typeof option !== 'string') {
+                    return String(option ?? '');
+                }
+                const trimmed = option.trim();
+                // Remove patterns like "A. ", "B) ", "C ", etc.
+                const sanitized = trimmed.replace(/^[A-D][\.\)]?\s+/i, '').trim();
+                return sanitized.length > 0 ? sanitized : trimmed;
+            });
+
             let html = `<div class="response-box quiz">`;
             html += `<strong>🎯 Quiz Question:</strong><br><br>`;
             html += `<p>${quizData.question}</p><br>`;
             
             // Create options with radio buttons
-            quizData.options.forEach((option, index) => {
+            normalizedOptions.forEach((option, index) => {
                 const optionLetter = String.fromCharCode(65 + index); // A, B, C, D
                 html += `
                     <div class="quiz-option">
@@ -957,15 +968,19 @@ HTML_TEMPLATE = """
             
             html += `<br>`;
             html += `<button class="btn" id="submitAnswerBtn">Submit Answer</button>`;
-            html += `<button class="forfeit-btn" id="forfeitBtn">Show Answer</button>`;
+            html += `<button class="btn" id="regenerateBtn" style="margin-left: 10px;"> Next Question ➡️ </button>`;
             html += `</div>`;
             
             responseArea.innerHTML = html;
             
-            // Store quiz data for validation
+            // Store quiz data for validation (with normalized options)
+            const normalizedQuizData = {
+                ...quizData,
+                options: normalizedOptions
+            };
             window.currentQuiz = {
                 type: 'multiple_choice',
-                data: quizData
+                data: normalizedQuizData
             };
             
             // Add event listeners
@@ -980,7 +995,7 @@ HTML_TEMPLATE = """
                 const resultHtml = `
                     <div class="quiz-result ${isCorrect ? 'correct' : 'incorrect'}">
                         <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</strong><br><br>
-                        <p>The correct answer is: <strong>${quizData.correct_answer}. ${quizData.options[quizData.correct_answer.charCodeAt(0) - 65]}</strong></p>
+                        <p>The correct answer is: <strong>${quizData.correct_answer}. ${normalizedOptions[quizData.correct_answer.charCodeAt(0) - 65]}</strong></p>
                         <p>${quizData.explanation || 'No explanation provided.'}</p>
                     </div>
                 `;
@@ -989,17 +1004,8 @@ HTML_TEMPLATE = """
                 document.getElementById('submitAnswerBtn').disabled = true;
             });
             
-            document.getElementById('forfeitBtn').addEventListener('click', () => {
-                const resultHtml = `
-                    <div class="quiz-result">
-                        <strong>✅ Answer:</strong><br><br>
-                        <p>The correct answer is: <strong>${quizData.correct_answer}. ${quizData.options[quizData.correct_answer.charCodeAt(0) - 65]}</strong></p>
-                        <p>${quizData.explanation || 'No explanation provided.'}</p>
-                    </div>
-                `;
-                
-                responseArea.innerHTML += resultHtml;
-                document.getElementById('submitAnswerBtn').disabled = true;
+            document.getElementById('regenerateBtn').addEventListener('click', () => {
+                generateQuiz('multiple_choice');
             });
         }
 
@@ -1028,7 +1034,7 @@ HTML_TEMPLATE = """
             html += `<input type="text" id="shortAnswerInput" class="query-input" placeholder="Type your answer here...">`;
             html += `<br><br>`;
             html += `<button class="btn" id="submitAnswerBtn">Submit Answer</button>`;
-            html += `<button class="forfeit-btn" id="forfeitBtn">Show Answer</button>`;
+            html += `<button class="btn" id="regenerateBtn" style="margin-left: 10px;"> Next Question ➡️ </button>`;
             html += `</div>`;
             
             responseArea.innerHTML = html;
@@ -1085,17 +1091,8 @@ HTML_TEMPLATE = """
                 }
             });
             
-            document.getElementById('forfeitBtn').addEventListener('click', () => {
-                const resultHtml = `
-                    <div class="quiz-result">
-                        <strong>✅ Answer:</strong><br><br>
-                        <p>The correct answer is: <strong>${quizData.answer}</strong></p>
-                        <p>${quizData.explanation || 'No explanation provided.'}</p>
-                    </div>
-                `;
-                
-                responseArea.innerHTML += resultHtml;
-                document.getElementById('submitAnswerBtn').disabled = true;
+            document.getElementById('regenerateBtn').addEventListener('click', () => {
+                generateQuiz('short_answer');
             });
         }
 
