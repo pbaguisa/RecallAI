@@ -369,4 +369,5 @@ Patrick Baguisa
 ---
 
 
-**Made with 📚 for students who want to study smarter, not harder**
+**Your Lectures, Your Assessments, Your Victories.**
+
