@@ -1,3 +1,4 @@
+# app.py
 """
 RecallAI - RAG-Powered Study Assistant
 Main Flask Application
@@ -7,6 +8,7 @@ from flask import Flask, request, jsonify, render_template_string
 import os
 import time
 import json
+import re
 from datetime import datetime
 from dotenv import load_dotenv
 import google.generativeai as genai
@@ -15,21 +17,8 @@ import google.generativeai as genai
 from rag import RAGSystem
 from utils import validate_input, check_safety, extract_pdf_text
 
-import google.generativeai as genai
-import os
-
 # Configure the Gemini API key
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
-
-# # List available models
-# try:
-#     models = genai.list_models()  # This fetches the available models
-#     print("Available Models:")
-#     for model in models:
-#         print(model)  # Print each available model
-# except Exception as e:
-#     print(f"Error fetching models: {e}")
-
 
 # Load environment variables
 load_dotenv()
@@ -171,11 +160,13 @@ def query():
     data = request.get_json(force=True, silent=True) or {}
     user_query = data.get("query", "")
     mode = data.get("mode", "summary")  # "summary" or "quiz"
+    quiz_type = data.get("quiz_type", "")  # "multiple_choice" or "short_answer"
 
-    # Validate input
-    validation = validate_input(user_query)
-    if validation["error"]:
-        return jsonify({"error": validation["message"]}), 400
+    # Validate input only if it's not a random quiz generation request
+    if user_query:
+        validation = validate_input(user_query)
+        if validation["error"]:
+            return jsonify({"error": validation["message"]}), 400
 
     # Safety check
     safety = check_safety(user_query)
@@ -188,22 +179,63 @@ def query():
         if not rag.has_documents():
             return jsonify({"error": "Please upload lecture PDFs before asking questions."}), 400
 
-        # Retrieve relevant context from RAG system
-        context_chunks = rag.retrieve(user_query, n_results=3)
-        print(f"Context Chunks Retrieved: {context_chunks}")  # Add this to see what chunks are retrieved
+        # For quiz mode without a specific query, get random content
+        if mode == "quiz" and not user_query:
+            # Get a random chunk from the RAG system
+            all_chunks = rag.get_all_chunks()
+            if not all_chunks:
+                return jsonify({"error": "No content available for quiz generation."}), 400
+            
+            # Select a random chunk
+            import random
+            random_chunk = random.choice(all_chunks)
+            context = random_chunk["text"]
+            sources = [random_chunk["source"]]
+        else:
+            # Retrieve relevant context from RAG system
+            context_chunks = rag.retrieve(user_query, n_results=3)
+            if not context_chunks:
+                return jsonify({"error": "Couldn't find relevant information in your slides. Try rephrasing your question."}), 404
 
-        if not context_chunks:
-            return jsonify({"error": "Couldn't find relevant information in your slides. Try rephrasing your question."}), 404
+            context = "\n\n".join(context_chunks)
+            sources = rag.get_sources(user_query)
 
-        context = "\n\n".join(context_chunks)
-
-        # Modify prompt based on mode
+        # Modify prompt based on mode and quiz type
         if mode == "quiz":
-            prompt = (
-                f"Generate ONE quiz question about: {user_query}\n\n"
-                "The question should test understanding of the concepts in the "
-                "provided lecture content. Make it specific and answerable from the slides."
-            )
+            if quiz_type == "multiple_choice":
+                prompt = (
+                    "Generate ONE multiple choice question based on the provided lecture content.\n\n"
+                    "The question should test understanding of the concepts in the "
+                    "provided lecture content. Make it specific and answerable from the slides.\n\n"
+                    "IMPORTANT: Format your response as valid JSON with the following structure:\n"
+                    "{\n"
+                    "  \"question\": \"Your question here\",\n"
+                    "  \"options\": [\"Option A\", \"Option B\", \"Option C\", \"Option D\"],\n"
+                    "  \"correct_answer\": \"A\",\n"
+                    "  \"explanation\": \"Explanation of why this is the correct answer\"\n"
+                    "}\n"
+                    "Make sure only one option is correct and the explanation references the lecture content."
+                )
+            elif quiz_type == "short_answer":
+                prompt = (
+                    "Generate ONE fill-in-the-blank question based on the provided lecture content.\n\n"
+                    "The question should test understanding of the concepts in the "
+                    "provided lecture content. Make it specific and answerable from the slides.\n\n"
+                    "IMPORTANT: Format your response as valid JSON with the following structure:\n"
+                    "{\n"
+                    "  \"question\": \"Your question with a blank marked as ____\",\n"
+                    "  \"answer\": \"The correct answer for the blank\",\n"
+                    "  \"explanation\": \"Explanation of why this is the correct answer\"\n"
+                    "}\n"
+                    "Make sure the answer is directly supported by the lecture content."
+                )
+            else:
+                # Default to original quiz behavior
+                prompt = (
+                    "Generate ONE quiz question based on the provided lecture content.\n\n"
+                    "The question should test understanding of the concepts in the "
+                    "provided lecture content. Make it specific and answerable from the slides."
+                )
         else:
             prompt = user_query
 
@@ -218,17 +250,52 @@ def query():
             start_time,
             tokens,
             cost,
-            {"chunks_retrieved": len(context_chunks)},
+            {"chunks_retrieved": len(context_chunks) if 'context_chunks' in locals() else 1},
         )
 
-        return jsonify(
-            {
+        # Parse JSON response for quiz types
+        if mode == "quiz" and quiz_type in ["multiple_choice", "short_answer"]:
+            try:
+                # Try to extract JSON from the response
+                json_match = re.search(r'({.*})', response, re.DOTALL)
+                if json_match:
+                    json_str = json_match.group(1)
+                    quiz_data = json.loads(json_str)
+                    return jsonify({
+                        "response": quiz_data,
+                        "mode": mode,
+                        "quiz_type": quiz_type,
+                        "sources": sources,
+                        "latency_ms": int((time.time() - start_time) * 1000),
+                    })
+                else:
+                    # If no JSON found, return the raw response with a flag
+                    return jsonify({
+                        "response": response,
+                        "mode": mode,
+                        "quiz_type": quiz_type,
+                        "is_valid_json": False,
+                        "sources": sources,
+                        "latency_ms": int((time.time() - start_time) * 1000),
+                    })
+            except json.JSONDecodeError as e:
+                print(f"JSON decode error: {e}")  # Debug the JSON parsing error
+                # If JSON parsing fails, return the raw response with a flag
+                return jsonify({
+                    "response": response,
+                    "mode": mode,
+                    "quiz_type": quiz_type,
+                    "is_valid_json": False,
+                    "sources": sources,
+                    "latency_ms": int((time.time() - start_time) * 1000),
+                })
+        else:
+            return jsonify({
                 "response": response,
                 "mode": mode,
-                "sources": rag.get_sources(user_query),
+                "sources": sources,
                 "latency_ms": int((time.time() - start_time) * 1000),
-            }
-        )
+            })
 
     except Exception as e:
         # Log the error for debugging
@@ -243,6 +310,52 @@ def query():
             {"error": str(e)},
         )
         return jsonify({"error": "Sorry, something went wrong. Please try again."}), 500
+
+
+@app.route("/validate_answer", methods=["POST"])
+def validate_answer():
+    """Validate short answer quiz responses."""
+    start_time = time.time()
+
+    data = request.get_json(force=True, silent=True) or {}
+    question = data.get("question", "")
+    user_answer = data.get("answer", "")
+    correct_answer = data.get("correct_answer", "")
+
+    try:
+        # Retrieve context for the question
+        context_chunks = rag.retrieve(question, n_results=2)
+        context = "\n\n".join(context_chunks)
+
+        # Get validation from LLM
+        prompt = (
+            f"Question: {question}\n\n"
+            f"Correct answer: {correct_answer}\n\n"
+            f"Student's answer: {user_answer}\n\n"
+            "Determine if the student's answer is correct or equivalent to the correct answer. "
+            "Consider synonyms, alternative phrasing, and partial credit. "
+            "Respond with JSON: {\"correct\": true/false, \"feedback\": \"Explanation\"}"
+        )
+        response, tokens, cost = call_llm(prompt, context)
+
+        try:
+            validation_result = json.loads(response)
+            log_request(question, "validate_answer", "RAG", start_time, tokens, cost)
+            return jsonify({
+                "validation": validation_result,
+                "latency_ms": int((time.time() - start_time) * 1000),
+            })
+        except json.JSONDecodeError:
+            # If JSON parsing fails, return a default response
+            log_request(question, "validate_answer", "RAG", start_time, tokens, cost)
+            return jsonify({
+                "validation": {"correct": False, "feedback": "Could not validate answer."},
+                "latency_ms": int((time.time() - start_time) * 1000),
+            })
+
+    except Exception:
+        log_request(question, "validate_answer", "RAG", start_time, 0, 0)
+        return jsonify({"error": "Could not validate answer."}), 500
 
 
 @app.route("/forfeit", methods=["POST"])
@@ -446,6 +559,28 @@ HTML_TEMPLATE = """
             color: var(--text);
             box-shadow: inset 0 0 35px rgba(180, 184, 196, 0.15);
         }
+        .quiz-type-toggle {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        .quiz-type-btn {
+            flex: 1;
+            padding: 14px;
+            border: 1px solid var(--border);
+            background: rgba(18, 18, 18, 0.8);
+            color: var(--muted);
+            border-radius: 14px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        .quiz-type-btn:hover {
+            background: var(--accent-soft);
+            border-color: rgba(184, 188, 200, 0.6);
+            color: var(--text);
+        }
         .query-input {
             width: 100%;
             padding: 18px;
@@ -526,6 +661,44 @@ HTML_TEMPLATE = """
             border: 1px solid var(--border);
             color: var(--muted);
         }
+        .quiz-option {
+            margin: 10px 0;
+            display: flex;
+            align-items: center;
+        }
+        .quiz-option input {
+            margin-right: 10px;
+        }
+        .quiz-option label {
+            cursor: pointer;
+        }
+        .quiz-result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+        }
+        .quiz-result.correct {
+            background: var(--success-bg);
+            color: var(--success-text);
+            border: 1px solid rgba(127, 216, 166, 0.3);
+        }
+        .quiz-result.incorrect {
+            background: var(--error-bg);
+            color: var(--error-text);
+            border: 1px solid rgba(255, 112, 141, 0.3);
+        }
+        .debug-info {
+            background: rgba(100, 100, 100, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 0.8em;
+            color: #ccc;
+            max-height: 150px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -575,8 +748,9 @@ HTML_TEMPLATE = """
                 <button class="mode-btn" id="quizBtn">🎯 Quiz Mode</button>
             </div>
 
-            <input type="text" id="queryInput" class="query-input" placeholder="Ask a question or request a summary...">
-            <button class="btn" id="submitBtn">Ask RecallAI</button>
+            <div id="querySection">
+                <!-- This will be replaced based on the mode -->
+            </div>
 
             <div id="responseArea"></div>
         </div>
@@ -643,23 +817,290 @@ HTML_TEMPLATE = """
             e.target.value = '';
         });
 
-        // --- Mode toggle ---
-        document.getElementById('summaryBtn').addEventListener('click', () => {
-            currentMode = 'summary';
-            document.getElementById('summaryBtn').classList.add('active');
-            document.getElementById('quizBtn').classList.remove('active');
-            document.getElementById('queryInput').placeholder = 'Ask a question or request a summary...';
+        // --- Initialize with summary mode ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize with summary mode
+            document.getElementById('querySection').innerHTML = `
+                <input type="text" id="queryInput" class="query-input" placeholder="Ask a question or request a summary...">
+                <button class="btn" id="submitBtn">Ask RecallAI</button>
+            `;
+            
+            // Attach event listeners
+            document.getElementById('submitBtn').addEventListener('click', submitQuery);
+            document.getElementById('queryInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('submitBtn').click();
+                }
+            });
+            
+            // Mode toggle listeners
+            document.getElementById('summaryBtn').addEventListener('click', () => {
+                currentMode = 'summary';
+                document.getElementById('summaryBtn').classList.add('active');
+                document.getElementById('quizBtn').classList.remove('active');
+                document.getElementById('querySection').innerHTML = `
+                    <input type="text" id="queryInput" class="query-input" placeholder="Ask a question or request a summary...">
+                    <button class="btn" id="submitBtn">Ask RecallAI</button>
+                `;
+                // Re-attach event listeners
+                document.getElementById('submitBtn').addEventListener('click', submitQuery);
+                document.getElementById('queryInput').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        document.getElementById('submitBtn').click();
+                    }
+                });
+            });
+            
+            document.getElementById('quizBtn').addEventListener('click', () => {
+                currentMode = 'quiz';
+                document.getElementById('quizBtn').classList.add('active');
+                document.getElementById('summaryBtn').classList.remove('active');
+                document.getElementById('querySection').innerHTML = `
+                    <div class="quiz-type-toggle">
+                        <button class="quiz-type-btn" id="multipleChoiceBtn">🔘 Multiple Choice</button>
+                        <button class="quiz-type-btn" id="shortAnswerBtn">✍️ Short Answer</button>
+                    </div>
+                `;
+                // Re-attach event listeners
+                document.getElementById('multipleChoiceBtn').addEventListener('click', () => {
+                    generateQuiz('multiple_choice');
+                });
+                document.getElementById('shortAnswerBtn').addEventListener('click', () => {
+                    generateQuiz('short_answer');
+                });
+            });
         });
 
-        document.getElementById('quizBtn').addEventListener('click', () => {
-            currentMode = 'quiz';
-            document.getElementById('quizBtn').classList.add('active');
-            document.getElementById('summaryBtn').classList.remove('active');
-            document.getElementById('queryInput').placeholder = 'What topic do you want to be quizzed on?';
-        });
+        // --- Generate quiz ---
+        async function generateQuiz(quizType) {
+            const responseArea = document.getElementById('responseArea');
+            responseArea.innerHTML = '<div class="loading">Generating quiz question... ⏳</div>';
+
+            try {
+                const res = await fetch('/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        query: '',  // Empty query for random quiz generation
+                        mode: 'quiz',
+                        quiz_type: quizType
+                    })
+                });
+
+                const data = await res.json();
+
+                if (!res.ok || data.error) {
+                    responseArea.innerHTML = `<div class="error">❌ ${data.error || 'Request failed'}</div>`;
+                    return;
+                }
+
+                // Debug: Log the response
+                console.log('Server response:', data);
+
+                // Check if the response is valid JSON
+                if (data.is_valid_json === false) {
+                    responseArea.innerHTML = `
+                        <div class="error">❌ The AI didn't return a valid format. Please try again.</div>
+                        <div class="debug-info">
+                            <strong>Debug info:</strong><br>
+                            ${JSON.stringify(data, null, 2)}
+                        </div>
+                    `;
+                    return;
+                }
+
+                if (quizType === 'multiple_choice') {
+                    displayMultipleChoiceQuiz(data.response);
+                } else if (quizType === 'short_answer') {
+                    displayShortAnswerQuiz(data.response);
+                }
+            } catch (err) {
+                responseArea.innerHTML = `<div class="error">❌ Request failed: ${err.message}</div>`;
+            }
+        }
+
+        // --- Display multiple choice quiz ---
+        function displayMultipleChoiceQuiz(quizData) {
+            const responseArea = document.getElementById('responseArea');
+            
+            // Debug: Log the quiz data
+            console.log('Quiz data:', quizData);
+            
+            // Check if quizData has the expected structure
+            if (!quizData || !quizData.question || !quizData.options || !quizData.correct_answer) {
+                responseArea.innerHTML = `
+                    <div class="error">❌ Invalid quiz format received</div>
+                    <div class="debug-info">
+                        <strong>Debug info:</strong><br>
+                        ${JSON.stringify(quizData, null, 2)}
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<div class="response-box quiz">`;
+            html += `<strong>🎯 Quiz Question:</strong><br><br>`;
+            html += `<p>${quizData.question}</p><br>`;
+            
+            // Create options with radio buttons
+            quizData.options.forEach((option, index) => {
+                const optionLetter = String.fromCharCode(65 + index); // A, B, C, D
+                html += `
+                    <div class="quiz-option">
+                        <input type="radio" id="option${optionLetter}" name="quizOption" value="${optionLetter}">
+                        <label for="option${optionLetter}">${optionLetter}. ${option}</label>
+                    </div>
+                `;
+            });
+            
+            html += `<br>`;
+            html += `<button class="btn" id="submitAnswerBtn">Submit Answer</button>`;
+            html += `<button class="forfeit-btn" id="forfeitBtn">Show Answer</button>`;
+            html += `</div>`;
+            
+            responseArea.innerHTML = html;
+            
+            // Store quiz data for validation
+            window.currentQuiz = {
+                type: 'multiple_choice',
+                data: quizData
+            };
+            
+            // Add event listeners
+            document.getElementById('submitAnswerBtn').addEventListener('click', () => {
+                const selectedOption = document.querySelector('input[name="quizOption"]:checked');
+                if (!selectedOption) {
+                    alert('Please select an answer');
+                    return;
+                }
+                
+                const isCorrect = selectedOption.value === quizData.correct_answer;
+                const resultHtml = `
+                    <div class="quiz-result ${isCorrect ? 'correct' : 'incorrect'}">
+                        <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</strong><br><br>
+                        <p>The correct answer is: <strong>${quizData.correct_answer}. ${quizData.options[quizData.correct_answer.charCodeAt(0) - 65]}</strong></p>
+                        <p>${quizData.explanation || 'No explanation provided.'}</p>
+                    </div>
+                `;
+                
+                responseArea.innerHTML += resultHtml;
+                document.getElementById('submitAnswerBtn').disabled = true;
+            });
+            
+            document.getElementById('forfeitBtn').addEventListener('click', () => {
+                const resultHtml = `
+                    <div class="quiz-result">
+                        <strong>✅ Answer:</strong><br><br>
+                        <p>The correct answer is: <strong>${quizData.correct_answer}. ${quizData.options[quizData.correct_answer.charCodeAt(0) - 65]}</strong></p>
+                        <p>${quizData.explanation || 'No explanation provided.'}</p>
+                    </div>
+                `;
+                
+                responseArea.innerHTML += resultHtml;
+                document.getElementById('submitAnswerBtn').disabled = true;
+            });
+        }
+
+        // --- Display short answer quiz ---
+        function displayShortAnswerQuiz(quizData) {
+            const responseArea = document.getElementById('responseArea');
+            
+            // Debug: Log the quiz data
+            console.log('Quiz data:', quizData);
+            
+            // Check if quizData has the expected structure
+            if (!quizData || !quizData.question || !quizData.answer) {
+                responseArea.innerHTML = `
+                    <div class="error">❌ Invalid quiz format received</div>
+                    <div class="debug-info">
+                        <strong>Debug info:</strong><br>
+                        ${JSON.stringify(quizData, null, 2)}
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `<div class="response-box quiz">`;
+            html += `<strong>🎯 Quiz Question:</strong><br><br>`;
+            html += `<p>${quizData.question}</p><br>`;
+            html += `<input type="text" id="shortAnswerInput" class="query-input" placeholder="Type your answer here...">`;
+            html += `<br><br>`;
+            html += `<button class="btn" id="submitAnswerBtn">Submit Answer</button>`;
+            html += `<button class="forfeit-btn" id="forfeitBtn">Show Answer</button>`;
+            html += `</div>`;
+            
+            responseArea.innerHTML = html;
+            
+            // Store quiz data for validation
+            window.currentQuiz = {
+                type: 'short_answer',
+                data: quizData
+            };
+            
+            // Add event listeners
+            document.getElementById('submitAnswerBtn').addEventListener('click', async () => {
+                const userAnswer = document.getElementById('shortAnswerInput').value.trim();
+                if (!userAnswer) {
+                    alert('Please enter an answer');
+                    return;
+                }
+                
+                document.getElementById('submitAnswerBtn').disabled = true;
+                responseArea.innerHTML += '<div class="loading">Validating answer... ⏳</div>';
+                
+                try {
+                    const res = await fetch('/validate_answer', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ 
+                            question: quizData.question,
+                            answer: userAnswer,
+                            correct_answer: quizData.answer
+                        })
+                    });
+                    
+                    const data = await res.json();
+                    
+                    if (!res.ok || data.error) {
+                        responseArea.innerHTML += `<div class="error">❌ ${data.error || 'Validation failed'}</div>`;
+                        return;
+                    }
+                    
+                    const isCorrect = data.validation.correct;
+                    const resultHtml = `
+                        <div class="quiz-result ${isCorrect ? 'correct' : 'incorrect'}">
+                            <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</strong><br><br>
+                            <p>Your answer: ${userAnswer}</p>
+                            <p>Correct answer: <strong>${quizData.answer}</strong></p>
+                            <p>${data.validation.feedback || 'No feedback provided.'}</p>
+                            <p>${quizData.explanation || 'No explanation provided.'}</p>
+                        </div>
+                    `;
+                    
+                    responseArea.innerHTML += resultHtml;
+                } catch (err) {
+                    responseArea.innerHTML += `<div class="error">❌ Validation failed: ${err.message}</div>`;
+                }
+            });
+            
+            document.getElementById('forfeitBtn').addEventListener('click', () => {
+                const resultHtml = `
+                    <div class="quiz-result">
+                        <strong>✅ Answer:</strong><br><br>
+                        <p>The correct answer is: <strong>${quizData.answer}</strong></p>
+                        <p>${quizData.explanation || 'No explanation provided.'}</p>
+                    </div>
+                `;
+                
+                responseArea.innerHTML += resultHtml;
+                document.getElementById('submitAnswerBtn').disabled = true;
+            });
+        }
 
         // --- Submit question ---
-        document.getElementById('submitBtn').addEventListener('click', async () => {
+        function submitQuery() {
             const input = document.getElementById('queryInput');
             const question = input.value.trim();
             const responseArea = document.getElementById('responseArea');
@@ -673,48 +1114,36 @@ HTML_TEMPLATE = """
             responseArea.innerHTML = '<div class="loading">Thinking with your slides... ⏳</div>';
             document.getElementById('submitBtn').disabled = true;
 
-            try {
-                const res = await fetch('/query', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ query: question, mode: currentMode })
-                });
-
-                const data = await res.json();
-
-                if (!res.ok || data.error) {
-                    responseArea.innerHTML = `<div class="error">❌ ${data.error || 'Request failed'}</div>`;
+            fetch('/query', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query: question, mode: currentMode })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    responseArea.innerHTML = `<div class="error">❌ ${data.error}</div>`;
                     return;
                 }
 
-                let html = `<div class="response-box ${currentMode === 'quiz' ? 'quiz' : ''}">`;
-                html += `<strong>${currentMode === 'quiz' ? '🎯 Quiz Question:' : '📝 Summary:'}</strong><br><br>`;
+                let html = `<div class="response-box">`;
+                html += `<strong>📝 Summary:</strong><br><br>`;
                 html += data.response.replace(/\\n/g, '<br>');
                 html += '</div>';
-
-                if (currentMode === 'quiz') {
-                    html += '<button class="forfeit-btn" onclick="forfeit()">❌ Forfeit & Show Answer</button>';
-                }
 
                 if (typeof data.latency_ms === 'number') {
                     html += `<p style="color: #999; font-size: 0.8em; margin-top: 10px;">⚡ Responded in ${data.latency_ms}ms</p>`;
                 }
 
                 responseArea.innerHTML = html;
-            } catch (err) {
+            })
+            .catch(err => {
                 responseArea.innerHTML = `<div class="error">❌ Request failed: ${err.message}</div>`;
-            } finally {
+            })
+            .finally(() => {
                 document.getElementById('submitBtn').disabled = false;
-            }
-        });
-
-        // Enter key submits
-        document.getElementById('queryInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('submitBtn').click();
-            }
-        });
+            });
+        }
 
         // --- Forfeit quiz ---
         async function forfeit() {

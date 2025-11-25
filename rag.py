@@ -110,7 +110,7 @@ class RAGSystem:
         Retrieve the top-n chunks most relevant to the query.
 
         This uses a very simple lexical overlap scoring function.
-        It’s intentionally lightweight and dependency-free.
+        It's intentionally lightweight and dependency-free.
 
         :param query: User question / prompt.
         :param n_results: Max number of chunks to return.
@@ -144,6 +144,13 @@ class RAGSystem:
 
         # Return just the text for context
         return [c["text"] for c in top]
+
+    def get_all_chunks(self) -> List[Dict[str, object]]:
+        """
+        Return all stored chunks.
+        Used for random quiz generation.
+        """
+        return self._chunks
 
     def _tokenize(self, text: str) -> List[str]:
         """

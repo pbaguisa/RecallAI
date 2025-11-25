@@ -35,3 +35,8 @@
 {"timestamp": "2025-11-24T14:35:52.093566", "mode": "summary", "pathway": "RAG", "query": "Explain what an operating system is like im 12 years old", "latency_ms": 4262, "tokens": 661, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
 {"timestamp": "2025-11-24T14:36:31.079041", "mode": "quiz", "pathway": "RAG", "query": "Test me on anything within the slides", "latency_ms": 2525, "tokens": 514, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
 {"timestamp": "2025-11-24T14:36:41.288618", "mode": "forfeit", "pathway": "RAG", "query": "Test me on anything within the slides", "latency_ms": 1423, "tokens": 419, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-11-24T15:40:53.993905", "mode": "quiz", "pathway": "RAG", "query": "Generate a quiz question", "latency_ms": 12858, "tokens": 318, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T15:41:07.676033", "mode": "quiz", "pathway": "RAG", "query": "Generate a quiz question", "latency_ms": 10651, "tokens": 299, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T15:41:34.360696", "mode": "summary", "pathway": "RAG", "query": "Explain what an operating system is to me like im 13 years old", "latency_ms": 7055, "tokens": 772, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-24T15:42:00.910403", "mode": "quiz", "pathway": "RAG", "query": "Generate a quiz question", "latency_ms": 5944, "tokens": 269, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-24T16:08:32.164358", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3042, "tokens": 447, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
