@@ -1,4 +1,4 @@
-# 📚 RecallAI
+# 🔃 RecallAI: Your Lectures, Your Assessments, Your Success
 
 > RAG-powered study assistant for active recall and quiz-based learning
 
@@ -357,7 +357,7 @@ MIT License - feel free to use for your coursework!
 
 ## 👤 Author
 
-Your Name - LLM App Assignment
+Patrick Baguisa
 
 ## 🙏 Acknowledgments
 
@@ -368,4 +368,9 @@ Your Name - LLM App Assignment
 
 ---
 
-**Made with 📚 for students who want to study smarter, not harder**
+
+**RecallAI: Your Lectures, Your Assessments, Your Success**
+
+
+
+
