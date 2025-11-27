@@ -98,3 +98,8 @@
 {"timestamp": "2025-11-25T14:07:59.549461", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 7467, "tokens": 478, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-11-25T14:08:01.551974", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2186, "tokens": 384, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-11-25T14:08:04.779731", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3241, "tokens": 455, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:09:04.918827", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2405, "tokens": 398, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:09:49.676406", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2881, "tokens": 487, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:09:53.508763", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5973, "tokens": 437, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-25T14:10:04.223497", "mode": "summary", "pathway": "RAG", "query": "What is an operating system", "latency_ms": 1579, "tokens": 554, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-11-25T14:13:03.548262", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3628, "tokens": 449, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
