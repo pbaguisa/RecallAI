@@ -1,4 +1,3 @@
-# app.py
 """
 RecallAI - RAG-Powered Study Assistant
 Main Flask Application
@@ -13,7 +12,7 @@ from datetime import datetime
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# Import our custom modules
+# Imports
 from rag import RAGSystem
 from utils import validate_input, check_safety, extract_pdf_text
 
@@ -319,43 +318,89 @@ def validate_answer():
 
     data = request.get_json(force=True, silent=True) or {}
     question = data.get("question", "")
-    user_answer = data.get("answer", "")
-    correct_answer = data.get("correct_answer", "")
+    user_answer = data.get("answer", "").strip()
+    correct_answer = data.get("correct_answer", "").strip()
 
     try:
+        # First, do a case-insensitive exact match check
+        if user_answer.lower() == correct_answer.lower():
+            log_request(question, "validate_answer", "RAG", start_time, 0, 0)
+            return jsonify({
+                "validation": {
+                    "correct": True,
+                    "feedback": f"Correct! '{user_answer}' matches the expected answer."
+                },
+                "latency_ms": int((time.time() - start_time) * 1000),
+            })
+
         # Retrieve context for the question
         context_chunks = rag.retrieve(question, n_results=2)
         context = "\n\n".join(context_chunks)
 
-        # Get validation from LLM
+        # Get validation from LLM for more complex matching
         prompt = (
             f"Question: {question}\n\n"
             f"Correct answer: {correct_answer}\n\n"
             f"Student's answer: {user_answer}\n\n"
             "Determine if the student's answer is correct or equivalent to the correct answer. "
-            "Consider synonyms, alternative phrasing, and partial credit. "
-            "Respond with JSON: {\"correct\": true/false, \"feedback\": \"Explanation\"}"
+            "Consider synonyms, alternative phrasing, partial credit, and case-insensitive matching. "
+            "Case should not matter - 'Answer', 'answer', and 'ANSWER' are all equivalent. "
+            "IMPORTANT: Respond ONLY with valid JSON in this exact format: "
+            "{{\"correct\": true or false, \"feedback\": \"brief explanation\"}}"
         )
         response, tokens, cost = call_llm(prompt, context)
 
+        # Try to extract JSON from the response
+        validation_result = None
         try:
+            # First try to parse the entire response as JSON
             validation_result = json.loads(response)
+        except json.JSONDecodeError:
+            # Try to find JSON object in the response (similar to quiz generation)
+            json_match = re.search(r'(\{.*\})', response, re.DOTALL)
+            if json_match:
+                try:
+                    json_str = json_match.group(1)
+                    validation_result = json.loads(json_str)
+                    # Verify it has the "correct" field
+                    if "correct" not in validation_result:
+                        validation_result = None
+                except json.JSONDecodeError:
+                    pass
+
+        if validation_result and "correct" in validation_result:
+            # Ensure correct is a boolean
+            validation_result["correct"] = bool(validation_result["correct"])
+            if "feedback" not in validation_result:
+                validation_result["feedback"] = "Answer validated."
             log_request(question, "validate_answer", "RAG", start_time, tokens, cost)
             return jsonify({
                 "validation": validation_result,
                 "latency_ms": int((time.time() - start_time) * 1000),
             })
-        except json.JSONDecodeError:
-            # If JSON parsing fails, return a default response
+        else:
+            # Fallback: case-insensitive comparison if LLM failed
+            is_correct = user_answer.lower() == correct_answer.lower()
             log_request(question, "validate_answer", "RAG", start_time, tokens, cost)
             return jsonify({
-                "validation": {"correct": False, "feedback": "Could not validate answer."},
+                "validation": {
+                    "correct": is_correct,
+                    "feedback": "Validated using direct comparison." if is_correct else f"Your answer '{user_answer}' does not match '{correct_answer}'."
+                },
                 "latency_ms": int((time.time() - start_time) * 1000),
             })
 
-    except Exception:
-        log_request(question, "validate_answer", "RAG", start_time, 0, 0)
-        return jsonify({"error": "Could not validate answer."}), 500
+    except Exception as e:
+        # Final fallback: case-insensitive comparison
+        is_correct = user_answer.lower() == correct_answer.lower() if user_answer and correct_answer else False
+        log_request(question, "validate_answer", "RAG", start_time, 0, 0, {"error": str(e)})
+        return jsonify({
+            "validation": {
+                "correct": is_correct,
+                "feedback": "Validated using direct comparison." if is_correct else f"Your answer '{user_answer}' does not match '{correct_answer}'."
+            },
+            "latency_ms": int((time.time() - start_time) * 1000),
+        })
 
 
 @app.route("/forfeit", methods=["POST"])
@@ -991,11 +1036,12 @@ HTML_TEMPLATE = """
                     return;
                 }
                 
-                const isCorrect = selectedOption.value === quizData.correct_answer;
+                // Case-insensitive comparison for multiple choice
+                const isCorrect = selectedOption.value.toUpperCase() === quizData.correct_answer.toUpperCase();
                 const resultHtml = `
                     <div class="quiz-result ${isCorrect ? 'correct' : 'incorrect'}">
                         <strong>${isCorrect ? '✅ Correct!' : '❌ Incorrect'}</strong><br><br>
-                        <p>The correct answer is: <strong>${quizData.correct_answer}. ${normalizedOptions[quizData.correct_answer.charCodeAt(0) - 65]}</strong></p>
+                        <p>The correct answer is: <strong>${quizData.correct_answer.toUpperCase()}. ${normalizedOptions[quizData.correct_answer.toUpperCase().charCodeAt(0) - 65]}</strong></p>
                         <p>${quizData.explanation || 'No explanation provided.'}</p>
                     </div>
                 `;

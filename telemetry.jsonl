@@ -103,3 +103,14 @@
 {"timestamp": "2025-11-25T14:09:53.508763", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5973, "tokens": 437, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-11-25T14:10:04.223497", "mode": "summary", "pathway": "RAG", "query": "What is an operating system", "latency_ms": 1579, "tokens": 554, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
 {"timestamp": "2025-11-25T14:13:03.548262", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3628, "tokens": 449, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-26T22:45:05.530671", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5352, "tokens": 413, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-11-26T22:45:37.915167", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3036, "tokens": 402, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:34:49.863228", "mode": "summary", "pathway": "RAG", "query": "Based on the lecture I have provided, explain to me what an operating system is in simple terms as i", "latency_ms": 3657, "tokens": 566, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}
+{"timestamp": "2025-12-01T15:37:45.955887", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3391, "tokens": 393, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:37:56.645668", "mode": "validate_answer", "pathway": "RAG", "query": "Operating Systems hide the hardware and present programs with clean and user-friendly interfaces by ", "latency_ms": 2579, "tokens": 434, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-12-01T15:39:52.686849", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2522, "tokens": 342, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:40:29.549757", "mode": "validate_answer", "pathway": "RAG", "query": "Most details of the OS interface are hidden from the programmer by the ____.", "latency_ms": 1774, "tokens": 465, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-12-01T15:43:20.310633", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3872, "tokens": 425, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:43:51.300276", "mode": "validate_answer", "pathway": "RAG", "query": "A system call is the programmatic manner in which a computer program requests a service or task from", "latency_ms": 0, "tokens": 0, "cost_usd": 0, "metadata": {}}
+{"timestamp": "2025-12-01T15:44:26.879565", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3196, "tokens": 393, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:44:36.257830", "mode": "validate_answer", "pathway": "RAG", "query": "Getting the time or date is an example of a system call categorized under ____.", "latency_ms": 1889, "tokens": 525, "cost_usd": 0.0, "metadata": {}}
