@@ -131,3 +131,11 @@
 {"timestamp": "2025-12-01T15:57:13.038069", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3420, "tokens": 466, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-12-01T15:57:20.295255", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3289, "tokens": 481, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-12-01T15:57:20.940276", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3627, "tokens": 457, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:02:58.981489", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 5423, "tokens": 412, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:03:07.890654", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2079, "tokens": 415, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:03:18.795634", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 4692, "tokens": 477, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:03:28.113484", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 6204, "tokens": 466, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:03:45.223755", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3236, "tokens": 388, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:04:11.288076", "mode": "validate_answer", "pathway": "RAG", "query": "The Simple Structure (MS-DOS) is described as being written to provide the most functionality in the", "latency_ms": 1863, "tokens": 482, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-12-01T16:04:17.017318", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2636, "tokens": 364, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T16:04:36.631720", "mode": "summary", "pathway": "RAG", "query": "Explain what an operating system is", "latency_ms": 1895, "tokens": 565, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 3}}

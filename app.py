@@ -946,9 +946,31 @@ HTML_TEMPLATE = """
         }
 
         // --- Generate quiz ---
+        let isGeneratingQuiz = false;
+        let abortController = null;
         async function generateQuiz(quizType) {
+            // Cancel any in-flight requests
+            if (abortController) {
+                abortController.abort();
+            }
+            
+            // Prevent multiple simultaneous quiz generations
+            if (isGeneratingQuiz) {
+                return;
+            }
+            
+            // Create a new AbortController for this request
+            abortController = new AbortController();
+            
             const responseArea = document.getElementById('responseArea');
+            // Clear immediately to prevent showing old content
+            responseArea.innerHTML = '';
+            
+            // Small delay to ensure DOM is cleared
+            await new Promise(resolve => setTimeout(resolve, 10));
+            
             responseArea.innerHTML = '<div class="loading">Generating quiz question... ⏳</div>';
+            isGeneratingQuiz = true;
 
             try {
                 const res = await fetch('/query', {
@@ -958,7 +980,8 @@ HTML_TEMPLATE = """
                         query: '',  // Empty query for random quiz generation
                         mode: 'quiz',
                         quiz_type: quizType
-                    })
+                    }),
+                    signal: abortController.signal
                 });
 
                 const data = await res.json();
@@ -989,13 +1012,23 @@ HTML_TEMPLATE = """
                     displayShortAnswerQuiz(data.response);
                 }
             } catch (err) {
+                // Ignore aborted requests
+                if (err.name === 'AbortError') {
+                    return;
+                }
                 responseArea.innerHTML = `<div class="error">❌ Request failed: ${err.message}</div>`;
+            } finally {
+                isGeneratingQuiz = false;
+                abortController = null;
             }
         }
 
         // --- Display multiple choice quiz ---
         function displayMultipleChoiceQuiz(quizData) {
             const responseArea = document.getElementById('responseArea');
+            
+            // Clear the response area immediately to prevent showing old content
+            responseArea.innerHTML = '';
             
             // Debug: Log the quiz data
             console.log('Quiz data:', quizData);
@@ -1087,6 +1120,9 @@ HTML_TEMPLATE = """
         // --- Display short answer quiz ---
         function displayShortAnswerQuiz(quizData) {
             const responseArea = document.getElementById('responseArea');
+            
+            // Clear the response area immediately to prevent showing old content
+            responseArea.innerHTML = '';
             
             // Debug: Log the quiz data
             console.log('Quiz data:', quizData);
