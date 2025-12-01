@@ -916,7 +916,34 @@ HTML_TEMPLATE = """
                     generateQuiz('short_answer');
                 });
             });
+            
+            // Event delegation for regenerate button (works even after DOM changes)
+            const responseArea = document.getElementById('responseArea');
+            if (responseArea) {
+                responseArea.addEventListener('click', (e) => {
+                    // Check if the clicked element is the regenerate button or inside it
+                    let target = e.target;
+                    while (target && target !== responseArea) {
+                        if (target.id === 'regenerateBtn') {
+                            e.preventDefault();
+                            regenerateQuiz();
+                            return;
+                        }
+                        target = target.parentElement;
+                    }
+                });
+            }
         });
+
+        // --- Regenerate quiz (uses stored quiz type) ---
+        function regenerateQuiz() {
+            if (window.currentQuiz && window.currentQuiz.type) {
+                generateQuiz(window.currentQuiz.type);
+            } else {
+                // Default to multiple choice if no type stored
+                generateQuiz('multiple_choice');
+            }
+        }
 
         // --- Generate quiz ---
         async function generateQuiz(quizType) {
@@ -1050,9 +1077,11 @@ HTML_TEMPLATE = """
                 document.getElementById('submitAnswerBtn').disabled = true;
             });
             
-            document.getElementById('regenerateBtn').addEventListener('click', () => {
-                generateQuiz('multiple_choice');
-            });
+            // Use event delegation or ensure button is always clickable
+            const regenerateBtn = document.getElementById('regenerateBtn');
+            if (regenerateBtn) {
+                regenerateBtn.onclick = regenerateQuiz;
+            }
         }
 
         // --- Display short answer quiz ---
@@ -1137,9 +1166,11 @@ HTML_TEMPLATE = """
                 }
             });
             
-            document.getElementById('regenerateBtn').addEventListener('click', () => {
-                generateQuiz('short_answer');
-            });
+            // Use event delegation or ensure button is always clickable
+            const regenerateBtn = document.getElementById('regenerateBtn');
+            if (regenerateBtn) {
+                regenerateBtn.onclick = regenerateQuiz;
+            }
         }
 
         // --- Submit question ---

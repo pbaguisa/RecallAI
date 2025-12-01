@@ -114,3 +114,20 @@
 {"timestamp": "2025-12-01T15:43:51.300276", "mode": "validate_answer", "pathway": "RAG", "query": "A system call is the programmatic manner in which a computer program requests a service or task from", "latency_ms": 0, "tokens": 0, "cost_usd": 0, "metadata": {}}
 {"timestamp": "2025-12-01T15:44:26.879565", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3196, "tokens": 393, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
 {"timestamp": "2025-12-01T15:44:36.257830", "mode": "validate_answer", "pathway": "RAG", "query": "Getting the time or date is an example of a system call categorized under ____.", "latency_ms": 1889, "tokens": 525, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-12-01T15:48:02.765218", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 4647, "tokens": 405, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:50:07.598459", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2862, "tokens": 392, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:50:31.024725", "mode": "validate_answer", "pathway": "RAG", "query": "Operating systems commonly possess a ____ for every device controller.", "latency_ms": 1598, "tokens": 472, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-12-01T15:50:44.692092", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3140, "tokens": 405, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:50:48.276141", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 4991, "tokens": 451, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:55:49.660587", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3051, "tokens": 370, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:56:06.384911", "mode": "validate_answer", "pathway": "RAG", "query": "The Android Operating System is based on the ____ kernel but modified.", "latency_ms": 0, "tokens": 0, "cost_usd": 0, "metadata": {}}
+{"timestamp": "2025-12-01T15:56:13.469078", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2618, "tokens": 370, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:56:21.266232", "mode": "validate_answer", "pathway": "RAG", "query": "A computer system can be split up roughly into ____ main components.", "latency_ms": 0, "tokens": 0, "cost_usd": 0, "metadata": {}}
+{"timestamp": "2025-12-01T15:56:29.208873", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2669, "tokens": 364, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:56:52.423876", "mode": "validate_answer", "pathway": "RAG", "query": "Most modern operating systems are considered a ______ model.", "latency_ms": 1295, "tokens": 427, "cost_usd": 0.0, "metadata": {}}
+{"timestamp": "2025-12-01T15:57:04.398712", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3767, "tokens": 397, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:57:04.433061", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 2757, "tokens": 412, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:57:06.614753", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3253, "tokens": 416, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:57:13.038069", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3420, "tokens": 466, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:57:20.295255", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3289, "tokens": 481, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
+{"timestamp": "2025-12-01T15:57:20.940276", "mode": "quiz", "pathway": "RAG", "query": "", "latency_ms": 3627, "tokens": 457, "cost_usd": 0.0, "metadata": {"chunks_retrieved": 1}}
