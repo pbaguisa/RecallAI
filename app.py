@@ -12,32 +12,29 @@ from datetime import datetime
 from dotenv import load_dotenv
 import google.generativeai as genai
 
-# Imports
 from rag import RAGSystem
 from utils import validate_input, check_safety, extract_pdf_text
 
-# Configure the Gemini API key
+# API Key
 genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
 
-# Load environment variables
 load_dotenv()
 
-# Initialize Flask app
+# Init Flask
 app = Flask(__name__)
 app.config["MAX_CONTENT_LENGTH"] = 16 * 1024 * 1024  # 16MB max file size
 app.config["UPLOAD_FOLDER"] = "uploads"
 
-# Create upload folder if it doesn't exist
+# Create upload folder
 os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
 
-# Initialize Gemini
+# Init Gemini, model: gemini-2.5-flash
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 model = genai.GenerativeModel("gemini-2.5-flash")
 
-# Initialize RAG system
+# Init RAG
 rag = RAGSystem()
 
-# System prompt
 SYSTEM_PROMPT = """You are RecallAI, a study assistant that helps students learn from lecture slides.
 
 DO:
@@ -74,7 +71,6 @@ def log_request(query, mode, pathway, start_time, tokens, cost, metadata=None):
         with open("telemetry.jsonl", "a", encoding="utf-8") as f:
             f.write(json.dumps(log_entry) + "\n")
     except Exception:
-        # Don't crash the app just because logging failed
         pass
 
 
@@ -89,9 +85,9 @@ def call_llm(prompt, context=""):
 
     response = model.generate_content(full_prompt)
 
-    # Super rough token estimate
+    # Approx token
     tokens = len(full_prompt.split()) + len((response.text or "").split())
-    cost = 0.0  # assume free tier
+    cost = 0.0  # Free tier lol
 
     return response.text, tokens, cost
 
@@ -147,7 +143,7 @@ def upload_pdf():
         )
 
     except Exception as e:
-        # Show the error in the browser so you can debug
+        # Shows the error in browser for flexibility
         return jsonify({"error": f"Error processing PDF: {str(e)}"}), 500
 
 
@@ -158,10 +154,10 @@ def query():
 
     data = request.get_json(force=True, silent=True) or {}
     user_query = data.get("query", "")
-    mode = data.get("mode", "summary")  # "summary" or "quiz"
-    quiz_type = data.get("quiz_type", "")  # "multiple_choice" or "short_answer"
+    mode = data.get("mode", "summary")  # Summary vs Quiz
+    quiz_type = data.get("quiz_type", "")  # MC or Short Answer
 
-    # Validate input only if it's not a random quiz generation request
+    # Validate input
     if user_query:
         validation = validate_input(user_query)
         if validation["error"]:
@@ -178,7 +174,6 @@ def query():
         if not rag.has_documents():
             return jsonify({"error": "Please upload lecture PDFs before asking questions."}), 400
 
-        # For quiz mode without a specific query, get random content
         if mode == "quiz" and not user_query:
             # Get a random chunk from the RAG system
             all_chunks = rag.get_all_chunks()
@@ -229,7 +224,7 @@ def query():
                     "Make sure the answer is directly supported by the lecture content."
                 )
             else:
-                # Default to original quiz behavior
+                # Default to og quiz behaviour
                 prompt = (
                     "Generate ONE quiz question based on the provided lecture content.\n\n"
                     "The question should test understanding of the concepts in the "
@@ -255,7 +250,7 @@ def query():
         # Parse JSON response for quiz types
         if mode == "quiz" and quiz_type in ["multiple_choice", "short_answer"]:
             try:
-                # Try to extract JSON from the response
+                # Extract JSON from the response
                 json_match = re.search(r'({.*})', response, re.DOTALL)
                 if json_match:
                     json_str = json_match.group(1)
@@ -356,7 +351,7 @@ def validate_answer():
             # First try to parse the entire response as JSON
             validation_result = json.loads(response)
         except json.JSONDecodeError:
-            # Try to find JSON object in the response (similar to quiz generation)
+            # Try to find JSON object in the response 
             json_match = re.search(r'(\{.*\})', response, re.DOTALL)
             if json_match:
                 try:

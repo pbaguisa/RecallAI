@@ -1,8 +1,8 @@
 # RecallAI - Technical Note
 
-**Student:** [Your Name]  
-**Course:** LLM Applications  
-**Date:** November 2024
+**Student:** Patrick Baguisa
+**Course:** Topics in CS: AI-Powered Software Engineering  
+**Date:** November 2025
 
 ## System Architecture
 

@@ -124,10 +124,10 @@ def main():
     """Run all tests"""
     print("\n🧪 RecallAI Test Suite\n")
     
-    # Run validation/safety tests (no LLM needed)
+    # Run validation/safety tests no LLM
     passed, failed, results = run_validation_tests()
     
-    # Show instructions for LLM tests
+    # Instructions for LLM 
     run_llm_tests()
     
     # Summary

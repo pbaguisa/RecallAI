@@ -1,4 +1,3 @@
-# rag.py
 """
 RecallAI - Simple RAG System
 
@@ -19,10 +18,10 @@ import re
 class RAGSystem:
     def __init__(self, chunk_size: int = 800, overlap: int = 100) -> None:
         """
-        Initialize the RAG system.
+        Init the RAG system.
 
         :param chunk_size: Number of characters per chunk.
-        :param overlap: Overlap between consecutive chunks (in characters).
+        :param overlap: Overlap between consecutive chunks (in char).
         """
         self.chunk_size = chunk_size
         self.overlap = overlap
@@ -33,9 +32,7 @@ class RAGSystem:
         # Stored after the last retrieval so get_sources() can report them
         self._last_retrieved_chunks: List[Dict[str, object]] = []
 
-    # ---------------------------------------------------------------------
     # Document ingestion
-    # ---------------------------------------------------------------------
     def add_document(self, text: str, source_name: str) -> None:
         """
         Add a new document's text to the RAG index.
@@ -53,21 +50,16 @@ class RAGSystem:
         self._chunk_and_store(cleaned, source_name)
 
     def _normalize_text(self, text: str) -> str:
-        """
-        Basic text normalization: normalize newlines and collapse extra spaces.
-        """
         # Normalize line endings
         text = text.replace("\r\n", "\n").replace("\r", "\n")
 
-        # Optionally, you can keep newlines for structure; here we keep them
-        # but collapse crazy spacing.
-        text = re.sub(r"[ \t]+", " ", text)
+        # Spacing
+
+        text = re.sub(r"[ \t]+", " ", text) 
         return text.strip()
 
     def _chunk_and_store(self, text: str, source_name: str) -> None:
-        """
-        Split text into overlapping character-based chunks and append to store.
-        """
+        # Split text into overlapping character-based chunks and append to store.
         start = 0
         index = len(self._chunks)
 
@@ -87,9 +79,7 @@ class RAGSystem:
                 break
             start = end - self.overlap
 
-    # ---------------------------------------------------------------------
-    # Status helpers (used by /status endpoint)
-    # ---------------------------------------------------------------------
+    # Status helpers (with /status endpoint)
     def has_documents(self) -> bool:
         """
         Return True if any chunks have been added.
@@ -102,9 +92,8 @@ class RAGSystem:
         """
         return len(self._chunks)
 
-    # ---------------------------------------------------------------------
+  
     # Retrieval
-    # ---------------------------------------------------------------------
     def retrieve(self, query: str, n_results: int = 3) -> List[str]:
         """
         Retrieve the top-n chunks most relevant to the query.
@@ -130,7 +119,7 @@ class RAGSystem:
             if score > 0:
                 scored.append((score, chunk))
 
-        # If nothing scored > 0, return empty so app.py can handle it
+        # If nothing scored > 0, return empty --> app.py handles
         if not scored:
             self._last_retrieved_chunks = []
             return []
@@ -139,23 +128,16 @@ class RAGSystem:
         scored.sort(key=lambda x: x[0], reverse=True)
         top = [c for _, c in scored[:n_results]]
 
-        # Remember these for get_sources()
         self._last_retrieved_chunks = top
 
-        # Return just the text for context
         return [c["text"] for c in top]
 
     def get_all_chunks(self) -> List[Dict[str, object]]:
-        """
-        Return all stored chunks.
-        Used for random quiz generation.
-        """
+        #  Return all stored chunks. For random quiz generation
         return self._chunks
 
     def _tokenize(self, text: str) -> List[str]:
-        """
-        Very simple tokenizer: lowercase, split on non-letters, drop short words.
-        """
+        # Tokenizer: lowercase, split on non-letters, drop short words.
         text = text.lower()
         # Split on anything that isn't a letter or number
         tokens = re.split(r"[^a-z0-9]+", text)
@@ -180,9 +162,7 @@ class RAGSystem:
 
         return len(overlap) / math.sqrt(len(q_set) * len(c_set))
 
-    # ---------------------------------------------------------------------
-    # Source reporting (used by /query endpoint)
-    # ---------------------------------------------------------------------
+    # Source reporting (with /query endpoint)
     def get_sources(self, query: str) -> List[str]:
         """
         Return a list of unique source names for the last retrieval.
@@ -208,9 +188,7 @@ class RAGSystem:
                 unique_sources.append(s)
         return unique_sources
 
-    # ---------------------------------------------------------------------
-    # (Optional) utility if you ever want to reset the index
-    # ---------------------------------------------------------------------
+    # Util to reset the index
     def clear(self) -> None:
         """
         Clear all stored chunks and retrieval history.

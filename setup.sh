@@ -10,12 +10,12 @@ echo ""
 echo "Checking Python version..."
 python3 --version
 
-# Create virtual environment
+# Create venv
 echo ""
 echo "Creating virtual environment..."
 python3 -m venv venv
 
-# Activate virtual environment
+# Activate venv
 echo ""
 echo "Activating virtual environment..."
 source venv/bin/activate
@@ -26,14 +26,14 @@ echo "Installing dependencies..."
 pip install --upgrade pip
 pip install -r requirements.txt
 
-# Create necessary directories
+# Create necessary dirs
 echo ""
 echo "Creating directories..."
 mkdir -p uploads
 mkdir -p data
 touch uploads/.gitkeep
 
-# Copy environment file
+# Copy env file
 echo ""
 if [ ! -f .env ]; then
     echo "Creating .env file..."
@@ -44,7 +44,6 @@ else
     echo ".env file already exists"
 fi
 
-# Create sample PDF from text
 echo ""
 echo "Creating sample lecture file..."
 echo "Note: You'll need to convert sample_lecture.txt to PDF manually"
