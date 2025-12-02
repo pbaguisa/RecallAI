@@ -357,7 +357,7 @@ MIT License - feel free to use for your coursework!
 
 ## 👤 Author
 
-Patrick Baguisa | Computer Science Student at Ontario Tech University
+Patrick Baguisa
 
 ## 🙏 Acknowledgments
 
