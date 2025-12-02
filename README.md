@@ -357,7 +357,7 @@ MIT License - feel free to use for your coursework!
 
 ## 👤 Author
 
-Patrick Baguisa
+Patrick Baguisa - Computer Science Student at Ontario Tech University
 
 ## 🙏 Acknowledgments
 
@@ -370,6 +370,7 @@ Patrick Baguisa
 
 
 **🔃 RecallAI: Your Lectures, Your Assessments, Your Success**
+
 
 
 
