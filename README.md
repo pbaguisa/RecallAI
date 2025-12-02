@@ -131,7 +131,7 @@ Validation & Safety Tests: 8/8 passed (100.0%)
 Tests 1-14 require the app to be running with PDFs loaded:
 
 1. Start the app: `python app.py`
-2. Upload sample PDFs from `data/` folder
+2. Upload sample PDFs from `uploads/` folder
 3. Try each test query from `tests.json`
 4. Verify responses contain expected keywords
 
@@ -357,7 +357,7 @@ MIT License - feel free to use for your coursework!
 
 ## 👤 Author
 
-Patrick Baguisa
+Patrick Baguisa | Computer Science Student at Ontario Tech University
 
 ## 🙏 Acknowledgments
 
@@ -370,7 +370,6 @@ Patrick Baguisa
 
 
 **🔃 RecallAI: Your Lectures, Your Assessments, Your Success**
-
 
 
 
