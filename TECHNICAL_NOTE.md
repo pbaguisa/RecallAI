@@ -195,10 +195,7 @@ Example: "What is gradient descent?" expects: `gradient|optimization|learning`
 - Rate limiting middleware
 - User authentication
 
-**Current state**: Development-ready, not production-ready.
+
 
 ---
 
-**Total Implementation**: ~800 lines of Python, ~200 lines HTML/JS  
-**Development time**: ~3 weeks (following assignment timeline)  
-**Grade target**: 90%+ based on rubric coverage

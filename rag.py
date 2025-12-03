@@ -1,13 +1,3 @@
-"""
-RecallAI - Simple RAG System
-
-This module provides a lightweight in-memory RAGSystem that:
-- Stores text from uploaded lecture PDFs in overlapping chunks
-- Retrieves the most relevant chunks for a user query
-- Tracks which source files (slides) the retrieved chunks came from
-
-It is intentionally dependency-free so it works out of the box with app.py.
-"""
 
 from __future__ import annotations
 from typing import List, Dict, Tuple
